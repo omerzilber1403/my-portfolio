@@ -1063,14 +1063,72 @@ function AgentSection() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(inputValue) }
   }
 
-  // Bold markdown renderer (simple)
-  const renderContent = (text) => {
+  // Rich message renderer — handles newlines, bullets, numbered lists, **bold**
+  const renderInline = (text) => {
     const parts = text.split(/(\*\*[^*]+\*\*)/g)
-    return parts.map((p, i) => p.startsWith('**') && p.endsWith('**')
-      ? <strong key={i} style={{ color: '#e2e8f0', fontWeight: 600 }}>{p.slice(2, -2)}</strong>
-      : <span key={i}>{p}</span>
+    return parts.map((p, i) =>
+      p.startsWith('**') && p.endsWith('**')
+        ? <strong key={i} style={{ color: '#22d3ee', fontWeight: 700 }}>{p.slice(2, -2)}</strong>
+        : <span key={i}>{p}</span>
     )
   }
+
+  const renderContent = (text) => {
+    const lines = text.split('\n')
+    const out = []
+    let bullets = []
+    let numbered = []
+
+    const flushBullets = (key) => {
+      if (!bullets.length) return
+      out.push(
+        <ul key={`ul-${key}`} style={{ margin: '6px 0 6px 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 5 }}>
+          {bullets.map((b, j) => (
+            <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: '0.83rem', lineHeight: 1.65, color: 'rgba(226,232,240,0.85)' }}>
+              <span style={{ color: '#22d3ee', marginTop: 2, flexShrink: 0, fontSize: '0.7rem' }}>◆</span>
+              <span>{renderInline(b)}</span>
+            </li>
+          ))}
+        </ul>
+      )
+      bullets = []
+    }
+
+    const flushNumbered = (key) => {
+      if (!numbered.length) return
+      out.push(
+        <ol key={`ol-${key}`} style={{ margin: '6px 0 6px 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 5 }}>
+          {numbered.map((n, j) => (
+            <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: '0.83rem', lineHeight: 1.65, color: 'rgba(226,232,240,0.85)' }}>
+              <span style={{ color: '#22d3ee', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.78rem', minWidth: 18, flexShrink: 0 }}>{j + 1}.</span>
+              <span>{renderInline(n)}</span>
+            </li>
+          ))}
+        </ol>
+      )
+      numbered = []
+    }
+
+    lines.forEach((raw, i) => {
+      const line = raw.trimEnd()
+      if (/^[-•*]\s+/.test(line)) {
+        flushNumbered(i)
+        bullets.push(line.replace(/^[-•*]\s+/, ''))
+      } else if (/^\d+[.)]\s+/.test(line)) {
+        flushBullets(i)
+        numbered.push(line.replace(/^\d+[.)]\s+/, ''))
+      } else if (line.trim() === '') {
+        flushBullets(i); flushNumbered(i)
+        if (out.length) out.push(<div key={`sp-${i}`} style={{ height: 6 }} />)
+      } else {
+        flushBullets(i); flushNumbered(i)
+        out.push(<p key={`p-${i}`} style={{ margin: 0, fontSize: '0.83rem', lineHeight: 1.7, color: 'rgba(226,232,240,0.85)' }}>{renderInline(line)}</p>)
+      }
+    })
+    flushBullets('end'); flushNumbered('end')
+    return <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>{out}</div>
+  }
+
 
   const agentStories = [
     {

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Routes, Route, useNavigate, useLocation, Link } from 'react-router-dom'
 import {
   Github, Linkedin, Mail, Phone, ExternalLink, Download,
-  ChevronRight, Cpu, Zap, Shield, Code2, Layers, Terminal,
+  ChevronRight, ChevronLeft, Cpu, Zap, Shield, Code2, Layers, Terminal,
   ArrowRight, Star, GitBranch, Box, Sparkles, Menu, X, Globe,
   Play, Bot, Send, RefreshCw, Wifi, WifiOff, Loader2
 } from 'lucide-react'
@@ -1285,11 +1285,15 @@ function AgentSection() {
           </div>
 
           {/* Right: sticky chat pane */}
-          <div className={`agent-chat-pane${mobileTab !== 'chat' ? ' agent-tab-hidden' : ''}`} style={{ position: 'sticky', top: 80, height: 'calc(100vh - 110px)', display: 'flex', flexDirection: 'column', background: 'rgba(8,12,24,0.8)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: 16, overflow: 'hidden' }}>
+          <div className={`agent-chat-pane${mobileTab !== 'chat' ? ' agent-tab-hidden' : ' agent-chat-fullscreen'}`} style={{ position: 'sticky', top: 80, height: 'calc(100vh - 110px)', display: 'flex', flexDirection: 'column', background: 'rgba(8,12,24,0.8)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: 16, overflow: 'hidden' }}>
 
             {/* Company tabs + status */}
-            <div style={{ display: 'flex', gap: 8, padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)', flexShrink: 0, alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 8, padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)', flexShrink: 0, alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                {/* Mobile back to walkthrough */}
+                <button className="agent-chat-back" onClick={() => setMobileTab('walkthrough')}>
+                  <ChevronLeft size={16} />
+                </button>
                 {companies.map(c => (
                   <button key={c.domain} onClick={() => switchCompany(c.domain)}
                     style={{
@@ -1383,7 +1387,7 @@ function AgentSection() {
 
             {/* Preset messages */}
             {backendStatus === 'online' && (
-              <div style={{ display: 'flex', gap: 6, padding: '10px 20px 0', flexWrap: 'wrap', flexShrink: 0 }}>
+              <div className="agent-preset-row" style={{ display: 'flex', gap: 6, padding: '10px 20px 0', flexWrap: 'wrap', flexShrink: 0 }}>
                 {(PRESET_MESSAGES[selectedDomain] || []).map((msg, i) => (
                   <button key={i} dir="auto" onClick={() => sendMessage(msg)} disabled={sending}
                     style={{ padding: '4px 12px', borderRadius: 999, fontSize: '0.71rem', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', color: 'rgba(226,232,240,0.55)', transition: 'all 0.2s ease', opacity: sending ? 0.4 : 1 }}

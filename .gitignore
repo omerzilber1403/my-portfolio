@@ -1,0 +1,8 @@
+node_modules
+dist
+.env
+.env.local
+temporary screenshots
+toRemove
+1772718871685*.png
+/*.pdf

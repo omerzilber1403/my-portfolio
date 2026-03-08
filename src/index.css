@@ -280,7 +280,42 @@ button:focus-visible, a:focus-visible {
 
 /* 7. Agent chat pane: full height on mobile */
 @media (max-width: 899px) {
-  .agent-chat-pane { position: static !important; height: 70vh !important; }
+  .agent-chat-pane { position: static !important; height: calc(100dvh - 200px) !important; min-height: 440px; }
+}
+
+/* 8. Agent demo mobile tab bar */
+.agent-mobile-tabs { display: none; }
+
+@media (max-width: 899px) {
+  .agent-mobile-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 4px;
+  }
+  .agent-mobile-tab {
+    flex: 1;
+    padding: 11px 8px;
+    border: none;
+    background: transparent;
+    border-radius: 9px;
+    color: rgba(226,232,240,0.5);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    min-height: 44px;
+  }
+  .agent-mobile-tab.active {
+    background: rgba(0,212,255,0.12);
+    color: #00d4ff;
+    border: 1px solid rgba(0,212,255,0.25);
+  }
+  .agent-tab-hidden { display: none !important; }
 }
 
 

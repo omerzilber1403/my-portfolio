@@ -986,6 +986,7 @@ function AgentSection() {
   const [inputValue, setInputValue] = useState('')
   const [sending, setSending] = useState(false)
   const [backendStatus, setBackendStatus] = useState('checking')
+  const [mobileTab, setMobileTab] = useState('walkthrough')
 
   const messagesEndRef = useRef(null)
   const pollTimerRef   = useRef(null)
@@ -1236,11 +1237,21 @@ function AgentSection() {
           </span>
         </div>
 
+        {/* Mobile tab bar */}
+        <div className="agent-mobile-tabs">
+          <button className={`agent-mobile-tab${mobileTab === 'walkthrough' ? ' active' : ''}`} onClick={() => setMobileTab('walkthrough')}>
+            📋 Walkthrough
+          </button>
+          <button className={`agent-mobile-tab${mobileTab === 'chat' ? ' active' : ''}`} onClick={() => { setMobileTab('chat'); setTimeout(() => inputRef.current?.focus(), 150) }}>
+            💬 Chat with Agent
+          </button>
+        </div>
+
         {/* Split layout */}
         <div className="agent-grid">
 
           {/* Left: story cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <div style={{ display: mobileTab !== 'walkthrough' ? 'none' : 'flex', flexDirection: 'column', gap: 24 }}>
             {agentStories.map(s => (
               <div key={s.sectionId} style={{
                 borderRadius: 16, padding: '24px 26px',
@@ -1274,7 +1285,7 @@ function AgentSection() {
           </div>
 
           {/* Right: sticky chat pane */}
-          <div className="agent-chat-pane" style={{ position: 'sticky', top: 80, height: 'calc(100vh - 110px)', display: 'flex', flexDirection: 'column', background: 'rgba(8,12,24,0.8)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: 16, overflow: 'hidden' }}>
+          <div className={`agent-chat-pane${mobileTab !== 'chat' ? ' agent-tab-hidden' : ''}`} style={{ position: 'sticky', top: 80, height: 'calc(100vh - 110px)', display: 'flex', flexDirection: 'column', background: 'rgba(8,12,24,0.8)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: 16, overflow: 'hidden' }}>
 
             {/* Company tabs + status */}
             <div style={{ display: 'flex', gap: 8, padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)', flexShrink: 0, alignItems: 'center', justifyContent: 'space-between' }}>

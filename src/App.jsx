@@ -1368,12 +1368,18 @@ function AgentSection() {
             <div style={{ display: 'flex', gap: 10, padding: '12px 20px 16px', flexShrink: 0 }}>
               <input
                 ref={inputRef}
-                dir="auto"
+                dir={selectedDomain === 'geula-surf.co.il' ? 'rtl' : 'auto'}
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 disabled={backendStatus !== 'online' || sending}
-                placeholder={backendStatus === 'online' ? `Message ${selectedCompany?.label ?? ''}…` : backendStatus === 'checking' ? 'Waiting for backend…' : 'Backend offline'}
+                placeholder={
+                  backendStatus !== 'online'
+                    ? (backendStatus === 'checking' ? 'Waiting for backend…' : 'Backend offline')
+                    : selectedDomain === 'geula-surf.co.il'
+                      ? `כתוב הודעה ל${selectedCompany?.label ?? ''}…`
+                      : `Message ${selectedCompany?.label ?? ''}…`
+                }
                 style={{
                   flex: 1, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: 10, padding: '10px 14px', color: '#e2e8f0', fontSize: '0.83rem',

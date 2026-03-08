@@ -394,17 +394,17 @@ function Hero() {
           }} />
 
           {/* ── Rings on hover ── */}
-          {[0, 1].map(i => (
+          {[0, 1, 2, 3, 4].map(i => (
             <div key={i} style={{
               position: 'absolute', zIndex: 2,
               bottom: '2%', left: '50%',
-              width:  `${220 + i * 100}px`,
-              height: `${220 + i * 100}px`,
+              width:  `${180 + i * 80}px`,
+              height: `${180 + i * 80}px`,
               borderRadius: '50%',
               transform: 'translateX(-50%)',
-              border: `1px solid rgba(0,212,255,${0.18 - i * 0.06})`,
+              border: `1px solid rgba(0,212,255,${0.22 - i * 0.04})`,
               opacity: rightHov ? 1 : 0,
-              animation: rightHov ? `incRing 3s ease-out ${i * 0.5}s infinite` : 'none',
+              animation: rightHov ? `incRing 3s ease-out ${i * 0.4}s infinite` : 'none',
               transition: 'opacity 0.5s ease',
               pointerEvents: 'none',
             }} />

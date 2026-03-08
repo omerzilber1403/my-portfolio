@@ -401,8 +401,6 @@ const TECH = [
   { label: 'Node.js', icon: '🟢' },
   { label: 'Unity3D', icon: '🎮' },
   { label: 'Claude API', icon: '🧠' },
-  { label: 'OpenAI API', icon: '✨' },
-  { label: 'Docker', icon: '🐳' },
 ]
 
 function TechStack() {

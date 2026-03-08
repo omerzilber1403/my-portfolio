@@ -239,7 +239,7 @@ function Hero() {
     if (!rect) return
     const dx = (e.clientX - (rect.left + rect.width  / 2)) / (rect.width  / 2)
     const dy = (e.clientY - (rect.top  + rect.height / 2)) / (rect.height / 2)
-    setPhotoTilt({ x: dx * 12, y: -dy * 9 })
+    setPhotoTilt({ x: dx * 5, y: -dy * 4 })
   }, [])
 
   const handlePhotoLeave = useCallback(() => {
@@ -392,14 +392,14 @@ function Hero() {
           <div style={{
             position: 'absolute', zIndex: 0, top: '5%', left: '10%',
             width: 260, height: 260, borderRadius: '50%',
-            background: `radial-gradient(circle, rgba(0,212,255,${rightHov ? 0.35 : 0.2}) 0%, transparent 65%)`,
+            background: `radial-gradient(circle, rgba(0,212,255,${rightHov ? 0.25 : 0.2}) 0%, transparent 65%)`,
             filter: 'blur(52px)', animation: 'float 7s ease-in-out infinite', pointerEvents: 'none',
             transition: 'background 0.4s ease',
           }} />
           <div style={{
             position: 'absolute', zIndex: 0, bottom: '8%', right: '8%',
             width: 230, height: 230, borderRadius: '50%',
-            background: `radial-gradient(circle, rgba(168,85,247,${rightHov ? 0.32 : 0.2}) 0%, transparent 65%)`,
+            background: `radial-gradient(circle, rgba(168,85,247,${rightHov ? 0.24 : 0.2}) 0%, transparent 65%)`,
             filter: 'blur(52px)', animation: 'float 9s ease-in-out infinite reverse', pointerEvents: 'none',
             transition: 'background 0.4s ease',
           }} />
@@ -410,19 +410,19 @@ function Hero() {
             filter: 'blur(36px)', animation: 'float 5s ease-in-out infinite 1.5s', pointerEvents: 'none',
           }} />
 
-          {/* ── Inception rings (expand outward on hover) ── */}
-          {[0, 1, 2, 3].map(i => (
+          {/* ── Subtle rings on hover ── */}
+          {[0, 1].map(i => (
             <div key={i} style={{
               position: 'absolute', zIndex: 2,
               bottom: '2%', left: '50%',
-              width:  `${180 + i * 90}px`,
-              height: `${180 + i * 90}px`,
+              width:  `${220 + i * 100}px`,
+              height: `${220 + i * 100}px`,
               borderRadius: '50%',
               transform: 'translateX(-50%)',
-              border: `1px solid rgba(0,212,255,${0.45 - i * 0.1})`,
+              border: `1px solid rgba(0,212,255,${0.18 - i * 0.06})`,
               opacity: rightHov ? 1 : 0,
-              animation: rightHov ? `incRing 2.2s cubic-bezier(0.25,0.46,0.45,0.94) ${i * 0.32}s infinite` : 'none',
-              transition: 'opacity 0.35s ease',
+              animation: rightHov ? `incRing 3s ease-out ${i * 0.5}s infinite` : 'none',
+              transition: 'opacity 0.5s ease',
               pointerEvents: 'none',
             }} />
           ))}
@@ -437,20 +437,20 @@ function Hero() {
               height: '95%', maxHeight: 490,
               objectFit: 'contain', objectPosition: 'bottom center',
               transform: rightHov
-                ? `translateX(-50%) perspective(900px) rotateY(${photoTilt.x}deg) rotateX(${photoTilt.y}deg) scale(1.07)`
+                ? `translateX(-50%) perspective(900px) rotateY(${photoTilt.x}deg) rotateX(${photoTilt.y}deg) scale(1.03)`
                 : 'translateX(-50%) perspective(900px) rotateY(0deg) rotateX(0deg) scale(1)',
               filter: rightHov
-                ? 'drop-shadow(0 0 48px rgba(0,212,255,0.55)) drop-shadow(0 0 96px rgba(0,212,255,0.25)) drop-shadow(0 24px 56px rgba(0,0,0,0.75))'
+                ? 'drop-shadow(0 0 28px rgba(0,212,255,0.28)) drop-shadow(0 20px 48px rgba(0,0,0,0.72))'
                 : 'drop-shadow(0 0 20px rgba(0,212,255,0.15)) drop-shadow(0 20px 48px rgba(0,0,0,0.7))',
               transition: rightHov
-                ? 'transform 0.08s linear, filter 0.35s ease'
-                : 'transform 0.65s cubic-bezier(0.34,1.56,0.64,1), filter 0.5s ease',
+                ? 'transform 0.1s linear, filter 0.4s ease'
+                : 'transform 0.7s cubic-bezier(0.34,1.56,0.64,1), filter 0.5s ease',
             }}
           />
           <style>{`
             @keyframes incRing {
-              0%   { transform: translateX(-50%) scale(0.75); opacity: 0.7; }
-              100% { transform: translateX(-50%) scale(1.55); opacity: 0; }
+              0%   { transform: translateX(-50%) scale(0.85); opacity: 0.5; }
+              100% { transform: translateX(-50%) scale(1.35); opacity: 0; }
             }
           `}</style>
         </div>

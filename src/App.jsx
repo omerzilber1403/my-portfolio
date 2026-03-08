@@ -231,21 +231,6 @@ function Hero() {
   const [roleVisible,  setRoleVisible]  = useState(true)
   const [primaryHov,   setPrimaryHov]   = useState(false)
   const [rightHov,     setRightHov]     = useState(false)
-  const [photoTilt,    setPhotoTilt]    = useState({ x: 0, y: 0 })
-  const photoColRef = useRef(null)
-
-  const handlePhotoMove = useCallback((e) => {
-    const rect = photoColRef.current?.getBoundingClientRect()
-    if (!rect) return
-    const dx = (e.clientX - (rect.left + rect.width  / 2)) / (rect.width  / 2)
-    const dy = (e.clientY - (rect.top  + rect.height / 2)) / (rect.height / 2)
-    setPhotoTilt({ x: dx * 5, y: -dy * 4 })
-  }, [])
-
-  const handlePhotoLeave = useCallback(() => {
-    setRightHov(false)
-    setPhotoTilt({ x: 0, y: 0 })
-  }, [])
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -381,12 +366,10 @@ function Hero() {
 
         {/* ── RIGHT COLUMN ─── */}
         <div
-          ref={photoColRef}
           className="hero-photo-col"
           style={{ position: 'relative', minWidth: 300 }}
           onMouseEnter={() => setRightHov(true)}
-          onMouseMove={handlePhotoMove}
-          onMouseLeave={handlePhotoLeave}
+          onMouseLeave={() => setRightHov(false)}
         >
           {/* ── z-0: Background orbs ── */}
           <div style={{
@@ -410,23 +393,6 @@ function Hero() {
             filter: 'blur(36px)', animation: 'float 5s ease-in-out infinite 1.5s', pointerEvents: 'none',
           }} />
 
-          {/* ── Subtle rings on hover ── */}
-          {[0, 1].map(i => (
-            <div key={i} style={{
-              position: 'absolute', zIndex: 2,
-              bottom: '2%', left: '50%',
-              width:  `${220 + i * 100}px`,
-              height: `${220 + i * 100}px`,
-              borderRadius: '50%',
-              transform: 'translateX(-50%)',
-              border: `1px solid rgba(0,212,255,${0.18 - i * 0.06})`,
-              opacity: rightHov ? 1 : 0,
-              animation: rightHov ? `incRing 3s ease-out ${i * 0.5}s infinite` : 'none',
-              transition: 'opacity 0.5s ease',
-              pointerEvents: 'none',
-            }} />
-          ))}
-
           {/* ── z-10: Photo (transparent PNG) ── */}
           <img
             src="/hero-photo.png"
@@ -436,23 +402,15 @@ function Hero() {
               bottom: 0, left: '50%',
               height: '95%', maxHeight: 490,
               objectFit: 'contain', objectPosition: 'bottom center',
-              transform: rightHov
-                ? `translateX(-50%) perspective(900px) rotateY(${photoTilt.x}deg) rotateX(${photoTilt.y}deg) scale(1.03)`
-                : 'translateX(-50%) perspective(900px) rotateY(0deg) rotateX(0deg) scale(1)',
+              transform: rightHov ? 'translateX(-50%) scale(1.025)' : 'translateX(-50%) scale(1)',
               filter: rightHov
-                ? 'drop-shadow(0 0 28px rgba(0,212,255,0.28)) drop-shadow(0 20px 48px rgba(0,0,0,0.72))'
+                ? 'drop-shadow(0 0 26px rgba(0,212,255,0.22)) drop-shadow(0 20px 48px rgba(0,0,0,0.72))'
                 : 'drop-shadow(0 0 20px rgba(0,212,255,0.15)) drop-shadow(0 20px 48px rgba(0,0,0,0.7))',
               transition: rightHov
-                ? 'transform 0.1s linear, filter 0.4s ease'
-                : 'transform 0.7s cubic-bezier(0.34,1.56,0.64,1), filter 0.5s ease',
+                ? 'transform 0.4s ease, filter 0.4s ease'
+                : 'transform 0.6s cubic-bezier(0.34,1.56,0.64,1), filter 0.5s ease',
             }}
           />
-          <style>{`
-            @keyframes incRing {
-              0%   { transform: translateX(-50%) scale(0.85); opacity: 0.5; }
-              100% { transform: translateX(-50%) scale(1.35); opacity: 0; }
-            }
-          `}</style>
         </div>
 
       </div>

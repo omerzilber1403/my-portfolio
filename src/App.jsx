@@ -1257,13 +1257,13 @@ function AgentSection() {
                     <div style={{ width: '100%', textAlign: 'center', fontSize: '0.7rem', color: 'rgba(226,232,240,0.35)', fontFamily: 'monospace', padding: '4px 0' }}>{msg.content}</div>
                   )}
                   {msg.role === 'user' && (
-                    <div style={{ maxWidth: '72%', background: 'rgba(0,212,255,0.12)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '16px 16px 4px 16px', padding: '10px 14px', fontSize: '0.83rem', color: '#e2e8f0', lineHeight: 1.6 }}>
+                    <div dir="auto" style={{ maxWidth: '72%', background: 'rgba(0,212,255,0.12)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '16px 16px 4px 16px', padding: '10px 14px', fontSize: '0.83rem', color: '#e2e8f0', lineHeight: 1.6 }}>
                       {msg.content}
                     </div>
                   )}
                   {msg.role === 'bot' && (
                     <div style={{ maxWidth: '82%', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      <div style={{ background: msg.isError ? 'rgba(248,113,113,0.08)' : 'rgba(255,255,255,0.04)', border: `1px solid ${msg.isError ? 'rgba(248,113,113,0.25)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '16px 16px 16px 4px', padding: '10px 14px', fontSize: '0.83rem', color: 'rgba(226,232,240,0.85)', lineHeight: 1.7 }}>
+                      <div dir="auto" style={{ background: msg.isError ? 'rgba(248,113,113,0.08)' : 'rgba(255,255,255,0.04)', border: `1px solid ${msg.isError ? 'rgba(248,113,113,0.25)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '16px 16px 16px 4px', padding: '10px 14px', fontSize: '0.83rem', color: 'rgba(226,232,240,0.85)', lineHeight: 1.7 }}>
                         {renderContent(msg.content)}
                       </div>
                       {msg.handoff && (
@@ -1297,7 +1297,7 @@ function AgentSection() {
             {backendStatus === 'online' && (
               <div style={{ display: 'flex', gap: 6, padding: '10px 20px 0', flexWrap: 'wrap', flexShrink: 0 }}>
                 {(PRESET_MESSAGES[selectedDomain] || []).map((msg, i) => (
-                  <button key={i} onClick={() => sendMessage(msg)} disabled={sending}
+                  <button key={i} dir="auto" onClick={() => sendMessage(msg)} disabled={sending}
                     style={{ padding: '4px 12px', borderRadius: 999, fontSize: '0.71rem', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', color: 'rgba(226,232,240,0.55)', transition: 'all 0.2s ease', opacity: sending ? 0.4 : 1 }}
                     onMouseEnter={e => { if (!sending) { e.currentTarget.style.borderColor = 'rgba(0,212,255,0.3)'; e.currentTarget.style.color = '#00d4ff' } }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(226,232,240,0.55)' }}
@@ -1310,6 +1310,7 @@ function AgentSection() {
             <div style={{ display: 'flex', gap: 10, padding: '12px 20px 16px', flexShrink: 0 }}>
               <input
                 ref={inputRef}
+                dir="auto"
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}

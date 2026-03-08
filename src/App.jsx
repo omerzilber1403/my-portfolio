@@ -1411,10 +1411,12 @@ function AgentSection() {
 // ─── Project Card ────────────────────────────────────────────────────────────
 function ProjectCard({ project, delay = 0, inView, onDemo }) {
   const [hovered, setHovered] = useState(false)
+  const [btnHov,  setBtnHov]  = useState(false)
   const accent       = project.accentColor  || '#00d4ff'
   const accentBg     = project.accentBg     || 'rgba(0,212,255,0.1)'
   const accentHover  = project.accentHoverBg || 'rgba(0,212,255,0.18)'
   const accentBorder = project.accentBorder || 'rgba(0,212,255,0.25)'
+  const isLive = !!project.demo
 
   return (
     <div
@@ -1437,12 +1439,37 @@ function ProjectCard({ project, delay = 0, inView, onDemo }) {
           : '0 4px 24px rgba(0,0,0,0.24)',
       }}
     >
+      <style>{`
+        @keyframes livePulse { 0%,100%{opacity:1;box-shadow:0 0 6px rgba(16,185,129,0.9)} 50%{opacity:0.5;box-shadow:0 0 14px rgba(16,185,129,0.4)} }
+        @keyframes termCursor { 0%,100%{opacity:1} 50%{opacity:0} }
+        @keyframes demoPing { 75%,100%{transform:scale(1.55);opacity:0} }
+      `}</style>
+
       {/* Ambient glow top-right */}
       <div style={{
         position: 'absolute', top: -50, right: -50, width: 180, height: 180, borderRadius: '50%',
         background: `radial-gradient(circle, ${project.glowColor || 'rgba(0,212,255,0.1)'} 0%, transparent 68%)`,
         pointerEvents: 'none', opacity: hovered ? 1.4 : 0.8, transition: 'opacity 0.4s ease',
       }} />
+
+      {/* ── 1. LIVE Pulse Badge ── */}
+      {isLive && (
+        <div style={{
+          position: 'absolute', top: 16, right: 16, zIndex: 10,
+          display: 'flex', alignItems: 'center', gap: 6,
+          padding: '4px 10px 4px 8px', borderRadius: 999,
+          background: 'rgba(16,185,129,0.1)',
+          border: '1px solid rgba(16,185,129,0.28)',
+          backdropFilter: 'blur(12px)',
+        }}>
+          <span style={{
+            width: 7, height: 7, borderRadius: '50%', flexShrink: 0,
+            background: '#10b981',
+            animation: 'livePulse 2s ease-in-out infinite',
+          }} />
+          <span style={{ fontSize: '0.58rem', fontWeight: 800, letterSpacing: '0.1em', color: '#10b981', textTransform: 'uppercase' }}>Live</span>
+        </div>
+      )}
 
       {/* ── Row 1: Icon + Flex Metric Badge ───────────────── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 18 }}>
@@ -1499,10 +1526,50 @@ function ProjectCard({ project, delay = 0, inView, onDemo }) {
 
       {/* Hook */}
       <p style={{
-        fontSize: '0.83rem', lineHeight: 1.6, color: 'rgba(226,232,240,0.52)', marginBottom: 20,
+        fontSize: '0.83rem', lineHeight: 1.6, color: 'rgba(226,232,240,0.52)', marginBottom: isLive ? 14 : 20,
       }}>
         {project.hook}
       </p>
+
+      {/* ── 2. Terminal Teaser (live cards only) ── */}
+      {isLive && (
+        <div style={{
+          marginBottom: 18, borderRadius: 10,
+          background: 'rgba(0,0,0,0.45)',
+          border: '1px solid rgba(255,255,255,0.07)',
+          overflow: 'hidden',
+        }}>
+          {/* Window chrome */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 12px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)' }}>
+            {['#ff5f57','#ffbd2e','#28c840'].map(c => (
+              <span key={c} style={{ width: 8, height: 8, borderRadius: '50%', background: c, opacity: 0.8 }} />
+            ))}
+            <span style={{ marginLeft: 6, fontSize: '0.58rem', color: 'rgba(226,232,240,0.25)', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
+              {project.demo === 'agent' ? 'agent-sales-bot — bash' : 'stomp-client — bash'}
+            </span>
+          </div>
+          {/* Terminal lines */}
+          <div style={{ padding: '10px 14px', fontFamily: 'monospace', fontSize: '0.72rem', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: 1 }}>
+            {project.demo === 'agent' ? <>
+              <div><span style={{ color: 'rgba(148,163,184,0.4)' }}>$ </span><span style={{ color: 'rgba(148,163,184,0.6)' }}>langgraph run --tenant geula-surf</span></div>
+              <div><span style={{ color: 'rgba(148,163,184,0.4)' }}>{'>'} </span><span style={{ color: accent }}>Loading tenant config...</span></div>
+              <div><span style={{ color: 'rgba(148,163,184,0.4)' }}>{'>'} </span><span style={{ color: '#e2e8f0' }}>Initializing Agent... </span><span style={{ color: '#10b981', fontWeight: 700 }}>[Ready]</span></div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+                <span style={{ color: 'rgba(148,163,184,0.4)' }}>{'>'} </span>
+                <span style={{ display: 'inline-block', width: 7, height: 13, background: accent, marginLeft: 1, opacity: 0.9, animation: 'termCursor 1s step-end infinite' }} />
+              </div>
+            </> : <>
+              <div><span style={{ color: 'rgba(148,163,184,0.4)' }}>$ </span><span style={{ color: 'rgba(148,163,184,0.6)' }}>./stomp-client --host localhost --port 8080</span></div>
+              <div><span style={{ color: 'rgba(148,163,184,0.4)' }}>{'>'} </span><span style={{ color: accent }}>TCP Connect → PORT 8080... </span><span style={{ color: '#10b981', fontWeight: 700 }}>[ESTABLISHED]</span></div>
+              <div><span style={{ color: 'rgba(148,163,184,0.4)' }}>{'>'} </span><span style={{ color: '#e2e8f0' }}>SUBSCRIBE /topic/matches </span><span style={{ color: '#a855f7' }}>✓</span></div>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span style={{ color: 'rgba(148,163,184,0.4)' }}>{'>'} </span>
+                <span style={{ display: 'inline-block', width: 7, height: 13, background: accent, marginLeft: 1, opacity: 0.9, animation: 'termCursor 1s step-end infinite' }} />
+              </div>
+            </>}
+          </div>
+        </div>
+      )}
 
       {/* ── Bullets ───────────────────────────────────────── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 22, flexGrow: 1 }}>
@@ -1541,28 +1608,36 @@ function ProjectCard({ project, delay = 0, inView, onDemo }) {
       {(project.links?.length > 0 || onDemo) && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {onDemo && (
-            <button onClick={onDemo}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '7px 14px', borderRadius: 8,
-                background: accentBg, border: `1px solid ${accentBorder}`,
-                fontSize: '0.78rem', fontWeight: 600, color: accent,
-                cursor: 'pointer',
-                transition: 'background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = accentHover
-                e.currentTarget.style.transform = 'translateY(-1px)'
-                e.currentTarget.style.boxShadow = `0 6px 20px ${project.glowColor || 'rgba(0,212,255,0.2)'}`
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = accentBg
-                e.currentTarget.style.transform = 'none'
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-            >
-              <Play size={12} /> Live Demo
-            </button>
+            <div style={{ position: 'relative', display: 'inline-flex' }}>
+              {/* ── 3. Ping ring ── */}
+              <div style={{
+                position: 'absolute', inset: 0, borderRadius: 10,
+                background: 'rgba(16,185,129,0.3)',
+                animation: 'demoPing 2.2s cubic-bezier(0,0,0.2,1) infinite',
+                pointerEvents: 'none',
+              }} />
+              <button
+                onClick={onDemo}
+                onMouseEnter={() => setBtnHov(true)}
+                onMouseLeave={() => setBtnHov(false)}
+                style={{
+                  position: 'relative', zIndex: 1,
+                  display: 'inline-flex', alignItems: 'center', gap: 7,
+                  padding: '9px 18px', borderRadius: 10,
+                  background: btnHov
+                    ? 'linear-gradient(135deg, rgba(16,185,129,0.28), rgba(16,185,129,0.14))'
+                    : 'linear-gradient(135deg, rgba(16,185,129,0.18), rgba(16,185,129,0.08))',
+                  border: `1px solid ${btnHov ? 'rgba(16,185,129,0.6)' : 'rgba(16,185,129,0.35)'}`,
+                  fontSize: '0.8rem', fontWeight: 700, color: '#10b981',
+                  cursor: 'pointer', letterSpacing: '0.01em',
+                  boxShadow: btnHov ? '0 0 24px rgba(16,185,129,0.35), 0 4px 16px rgba(0,0,0,0.4)' : '0 0 12px rgba(16,185,129,0.15)',
+                  transform: btnHov ? 'translateY(-1px)' : 'none',
+                  transition: 'background 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, transform 0.2s ease',
+                }}
+              >
+                <Zap size={13} style={{ flexShrink: 0 }} /> Launch Demo →
+              </button>
+            </div>
           )}
           {project.links && project.links.map(link => (
             <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer"

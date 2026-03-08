@@ -258,13 +258,13 @@ button:focus-visible, a:focus-visible {
   .agent-grid { grid-template-columns: 38% 1fr; gap: 56px; }
 }
 
-/* 4. Hero photo column: shrink on mobile */
+/* 4. Hero photo column: hidden on mobile, full height on desktop */
 .hero-photo-col {
-  height: 300px;
+  display: none;
   min-width: unset !important;
 }
 @media (min-width: 1024px) {
-  .hero-photo-col { height: 520px; }
+  .hero-photo-col { display: block; height: 520px; }
 }
 
 /* 5. Stack hero CTA buttons on small phones */

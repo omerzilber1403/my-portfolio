@@ -146,25 +146,45 @@ function Navbar() {
           <button
             onClick={() => setMenuOpen(v => !v)}
             aria-label="Toggle menu"
-            style={{ display: 'none', background: 'none', border: 'none', color: '#e2e8f0', cursor: 'pointer', padding: 4 }}
+            style={{
+              display: 'none', background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 8, color: '#e2e8f0', cursor: 'pointer',
+              padding: 0, width: 44, height: 44,
+              alignItems: 'center', justifyContent: 'center',
+              transition: 'background 0.2s ease',
+            }}
             className="mobile-menu-btn"
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
-      {/* Mobile menu */}
+      {/* Mobile drawer */}
       {menuOpen && (
-        <div style={{
-          background: 'rgba(5,8,16,0.97)', backdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(255,255,255,0.06)',
-          padding: '20px 24px 28px',
-          display: 'flex', flexDirection: 'column', gap: 20
+        <div className="mobile-drawer" style={{
+          background: 'rgba(5,8,16,0.97)', backdropFilter: 'blur(24px)',
+          borderTop: '1px solid rgba(255,255,255,0.07)',
+          padding: '24px 24px 32px',
+          display: 'flex', flexDirection: 'column', gap: 4,
         }}>
           {links.map(l => (
-            <a key={l.href} href={l.href} className="nav-link" style={{ textDecoration: 'none', fontSize: '1rem' }}
-              onClick={() => setMenuOpen(false)}>{l.label}</a>
+            <a key={l.href} href={l.href}
+              className="nav-link card-interactive"
+              style={{
+                textDecoration: 'none', fontSize: '1.05rem', fontWeight: 500,
+                padding: '14px 12px', borderRadius: 10,
+                display: 'flex', alignItems: 'center',
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+              }}
+              onClick={() => setMenuOpen(false)}
+            >{l.label}</a>
           ))}
+          <a href="mailto:omerzilber1403@gmail.com"
+            className="btn-primary"
+            style={{ marginTop: 12, textAlign: 'center', justifyContent: 'center' }}
+            onClick={() => setMenuOpen(false)}
+          >Hire Me</a>
         </div>
       )}
     </nav>
@@ -231,7 +251,7 @@ function Hero() {
       position: 'relative', overflow: 'hidden',
     }}>
       <div style={{ maxWidth: 1280, width: '100%', margin: '0 auto', position: 'relative', zIndex: 1 }}
-        className="grid lg:grid-cols-2 gap-16 items-center">
+        className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
 
         {/* ── LEFT COLUMN ─────────────────────────── */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -260,7 +280,7 @@ function Hero() {
             }}>Hi, I'm</span>
             <span className="text-gradient" style={{
               display: 'block', fontFamily: 'Space Grotesk, sans-serif',
-              fontSize: 'clamp(2.6rem, 5.5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-0.04em',
+              fontSize: 'clamp(1.9rem, 5.5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-0.04em',
             }}>Omer Zilbershtein</span>
           </h1>
 
@@ -288,7 +308,7 @@ function Hero() {
           </p>
 
           {/* CTA row */}
-          <div className="animate-fade-in-up delay-400" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 28 }}>
+          <div className="animate-fade-in-up delay-400 hero-cta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 28 }}>
             <a href="#projects"
               onMouseEnter={() => setPrimaryHov(true)}
               onMouseLeave={() => setPrimaryHov(false)}
@@ -319,8 +339,9 @@ function Hero() {
               <a key={s.label} href={s.href}
                 target={s.href.startsWith('http') ? '_blank' : undefined}
                 rel="noopener noreferrer" title={s.label}
+                className="social-link"
                 style={{
-                  width: 40, height: 40, borderRadius: '50%',
+                  width: 44, height: 44, borderRadius: '50%',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
                   color: 'rgba(226,232,240,0.55)', textDecoration: 'none',
@@ -344,7 +365,7 @@ function Hero() {
         </div>
 
         {/* ── RIGHT COLUMN ─── */}
-        <div style={{ position: 'relative', height: 520, minWidth: 300 }}>
+        <div className="hero-photo-col" style={{ position: 'relative', minWidth: 300 }}>
           {/* ── z-0: Background orbs ── */}
           <div style={{
             position: 'absolute', zIndex: 0, top: '5%', left: '10%',
@@ -903,7 +924,7 @@ function StompSection() {
         </div>
 
         {/* Split layout */}
-        <div style={{ display: 'grid', gridTemplateColumns: '38% 1fr', gap: 56, alignItems: 'start' }}>
+        <div className="agent-grid">
 
           {/* Left: story cards */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -1216,7 +1237,7 @@ function AgentSection() {
         </div>
 
         {/* Split layout */}
-        <div style={{ display: 'grid', gridTemplateColumns: '38% 1fr', gap: 56, alignItems: 'start' }}>
+        <div className="agent-grid">
 
           {/* Left: story cards */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -1253,7 +1274,7 @@ function AgentSection() {
           </div>
 
           {/* Right: sticky chat pane */}
-          <div style={{ position: 'sticky', top: 80, height: 'calc(100vh - 110px)', display: 'flex', flexDirection: 'column', background: 'rgba(8,12,24,0.8)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: 16, overflow: 'hidden' }}>
+          <div className="agent-chat-pane" style={{ position: 'sticky', top: 80, height: 'calc(100vh - 110px)', display: 'flex', flexDirection: 'column', background: 'rgba(8,12,24,0.8)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: 16, overflow: 'hidden' }}>
 
             {/* Company tabs + status */}
             <div style={{ display: 'flex', gap: 8, padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)', flexShrink: 0, alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1958,10 +1979,10 @@ function AgentPage() {
 // ─── Portfolio Page ───────────────────────────────────────────────────────────
 function PortfolioPage() {
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', background: '#050810' }}>
+    <div style={{ minHeight: '100vh', position: 'relative', background: '#050810', overflowX: 'hidden' }}>
       <BackgroundOrbs />
       <Navbar />
-      <main style={{ position: 'relative', zIndex: 1 }}>
+      <main style={{ position: 'relative', zIndex: 1, overflowX: 'hidden' }}>
         <Hero />
         <TechStack />
         <About />

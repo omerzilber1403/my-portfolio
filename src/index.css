@@ -224,8 +224,65 @@ button:focus-visible, a:focus-visible {
 /* Nav mobile */
 @media (max-width: 768px) {
   .hidden-mobile { display: none !important; }
-  .mobile-menu-btn { display: block !important; }
+  .mobile-menu-btn { display: flex !important; align-items: center; justify-content: center; }
 }
+
+/* ─── MOBILE RESPONSIVE ───────────────────────────────────────────────── */
+
+/* 1. Minimum 44px touch targets */
+.btn-primary, .btn-secondary { min-height: 44px; }
+
+/* Active (tap) feedback — replaces hover on touch devices */
+.btn-primary:active  { transform: scale(0.96) !important; opacity: 0.85; }
+.btn-secondary:active { transform: scale(0.96) !important; }
+.glass-hover:active  { transform: scale(0.98) !important; opacity: 0.85; }
+.nav-link:active     { opacity: 0.55; }
+.social-link:active  { transform: scale(0.88) !important; opacity: 0.7; }
+.card-interactive:active { transform: scale(0.98) !important; opacity: 0.9; }
+
+/* 2. Nav mobile drawer animation */
+@keyframes drawer-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mobile-drawer { animation: drawer-in 0.22s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* 3. Agent section responsive grid */
+.agent-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .agent-grid { grid-template-columns: 38% 1fr; gap: 56px; }
+}
+
+/* 4. Hero photo column: shrink on mobile */
+.hero-photo-col {
+  height: 300px;
+  min-width: unset !important;
+}
+@media (min-width: 1024px) {
+  .hero-photo-col { height: 520px; }
+}
+
+/* 5. Stack hero CTA buttons on small phones */
+@media (max-width: 400px) {
+  .hero-cta-row { flex-direction: column; }
+  .hero-cta-row > * { width: 100%; justify-content: center; }
+}
+
+/* 6. Trait grid: 1 col on very small screens */
+@media (max-width: 400px) {
+  .trait-grid { grid-template-columns: 1fr; }
+}
+
+/* 7. Agent chat pane: full height on mobile */
+@media (max-width: 899px) {
+  .agent-chat-pane { position: static !important; height: 70vh !important; }
+}
+
 
 /* Hero stats row */
 .stats-row {

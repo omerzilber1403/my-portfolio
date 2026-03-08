@@ -6,6 +6,7 @@ import {
   ArrowRight, Star, GitBranch, Box, Sparkles, Menu, X, Globe,
   Play, Bot, Send, RefreshCw, Wifi, WifiOff, Loader2
 } from 'lucide-react'
+import { Analytics } from '@vercel/analytics/react'
 
 // ─── STOMP Demo constants ────────────────────────────────────────────────────
 const CHAR_DELAY = 15
@@ -1990,6 +1991,7 @@ export default function App() {
         <Route path="/projects/stomp" element={<StompPage />} />
         <Route path="/projects/agent" element={<AgentPage />} />
       </Routes>
+      <Analytics />
     </>
   )
 }

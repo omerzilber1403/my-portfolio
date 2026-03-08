@@ -393,6 +393,23 @@ function Hero() {
             filter: 'blur(36px)', animation: 'float 5s ease-in-out infinite 1.5s', pointerEvents: 'none',
           }} />
 
+          {/* ── Rings on hover ── */}
+          {[0, 1].map(i => (
+            <div key={i} style={{
+              position: 'absolute', zIndex: 2,
+              bottom: '2%', left: '50%',
+              width:  `${220 + i * 100}px`,
+              height: `${220 + i * 100}px`,
+              borderRadius: '50%',
+              transform: 'translateX(-50%)',
+              border: `1px solid rgba(0,212,255,${0.18 - i * 0.06})`,
+              opacity: rightHov ? 1 : 0,
+              animation: rightHov ? `incRing 3s ease-out ${i * 0.5}s infinite` : 'none',
+              transition: 'opacity 0.5s ease',
+              pointerEvents: 'none',
+            }} />
+          ))}
+
           {/* ── z-10: Photo (transparent PNG) ── */}
           <img
             src="/hero-photo.png"
@@ -411,6 +428,7 @@ function Hero() {
                 : 'transform 0.6s cubic-bezier(0.34,1.56,0.64,1), filter 0.5s ease',
             }}
           />
+          <style>{`@keyframes incRing { 0% { transform:translateX(-50%) scale(0.85); opacity:0.5; } 100% { transform:translateX(-50%) scale(1.35); opacity:0; } }`}</style>
         </div>
 
       </div>
